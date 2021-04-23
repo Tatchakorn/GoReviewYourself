@@ -21,7 +21,7 @@ def convert_all_to_float(df):
     return df
 
 
-def scatter_with_linReg(dataframe, sort_val, ax_list, title, save_path=None, x_label, y_label):
+def scatter_with_linReg(dataframe, sort_val, ax_list, title, save_path, x_label, y_label):
     
     '''
     Plot scatter graph
@@ -155,21 +155,22 @@ def beautiful_graph():
         plt.cla()
     
 
-if __name__=="__main__": 
-    path = r"C:\go_concat\pca_new_table.pkl"
-    df = pd.read_pickle(path)
+if __name__=="__main__":
+    pass 
+    # path = r"C:\go_concat\pca_new_table.pkl"
+    # df = pd.read_pickle(path)
 
-    print(df.head().to_string())
+    # print(df.head().to_string())
 
-    x = "bot%"
-    y = "win%"
+    # x = "bot%"
+    # y = "win%"
 
-    plt.style.use("seaborn")
-    df = df.sort_values(by=[x, y])
-    new_df = df[[x, y]]
+    # plt.style.use("seaborn")
+    # df = df.sort_values(by=[x, y])
+    # new_df = df[[x, y]]
 
-    print(new_df.head().to_string())
-    path = r"C:\go_concat\graph\optimal_k_0_0.png"
-    optimal_k(new_df, save_path=path)
-    path = r"C:\go_concat\graph\kmean_0_0.png"
-    cluster_df(df=new_df, x_label=x, y_label=y, n_cluster=3,save_path=path)
+    # print(new_df.head().to_string())
+    # path = r"C:\go_concat\graph\optimal_k_0_0.png"
+    # optimal_k(new_df, save_path=path)
+    # path = r"C:\go_concat\graph\kmean_0_0.png"
+    # cluster_df(df=new_df, x_label=x, y_label=y, n_cluster=3,save_path=path)

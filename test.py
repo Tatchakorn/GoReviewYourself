@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import read_write_path as rw
 import map_functions as m
+import table_functions as tf
 import pandas as pd
 import numpy as np
 import hashlib
@@ -30,12 +31,16 @@ range of rank
 test_file_name = "58258547.sgf"
 test_player_name = "lylotus"
 name = 'shigepo'
-# df = rw.read_result_table()
 
+df = rw.read_result_table_new()
 
-df = rw.read_player_table()
-df.loc[]
-print(df.head())
+tf.player_table(df)
+
+# print(m.find_all_bot_games())
+
+# df = rw.read_player_table()
+# df.loc[]
+# print(df.head())
 # print(m.find_all_bot_games().describe)
 # print(m.find_all_bot_games(), "\n") # 478206
 # m.get_Unique_bots("both")

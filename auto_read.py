@@ -68,7 +68,7 @@ for sgf_file in sgf_files:
     result_dict[dict_index] = {"File name": file_name,"Black player":b_player, "Black Rank":b_rank, "White player":w_player, "White Rank":w_rank, "Result":result}
     record_dict[dict_index] = {"File name": file_name,"Record":game_sequence}
     dict_index += 1
-    if dict_index == 100000: # number of rows for each file
+    if dict_index == 200_000: # number of rows for each file
         save_table(result_dict, record_dict, save_file_index)
         
         result_dict.clear()
@@ -76,7 +76,7 @@ for sgf_file in sgf_files:
         save_file_index += 1
         dict_index = 0
 
-if result_dict and record_dic: # if both not empty
+if result_dict and record_dict: # if both not empty
     save_table(result_dict, record_dict, save_file_index)
 
 

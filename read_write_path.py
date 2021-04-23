@@ -26,20 +26,20 @@ def read_level_up_player_table():
     path = r"/home/tatchakorn/Desktop/documents/go_data/table/level_up_player_table.pkl"
     return pd.read_pickle(path)
 
-def read_result_table_new(num):
-    path = f"/home/tatchakorn/Desktop/documents/New_Table/go_result_table_new_{num}.pkl"
-    if num > 100:
-        print(num, 'file does not exist')
-        return
+def read_result_table_new():
+    path = r"/home/tatchakorn/Desktop/documents/New_Table/result_table_new.pkl"
     return pd.read_pickle(path)
 
 def read_record_table_new(num):
     path = f"/home/tatchakorn/Desktop/documents/New_Table/go_record_table_new_{num}.pkl"
-    if num > 100:
+    if num > 9:
         print(num, 'file does not exist')
         return
     return pd.read_pickle(path)
 
+def read_player_table_new():
+    path = r"/home/tatchakorn/Desktop/documents/New_Table/player_table_new.pkl"
+    return pd.read_pickle(path)
 
 # ----- Save ----- ----- Save ----- ----- Save ----- ----- Save -----
 

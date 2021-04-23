@@ -60,9 +60,8 @@ def find_all_bot_games():
     df = rw.read_result_table()
     
     # Find rows that have bot name (i.e. "Gotrend" in name)
-    # bot_name = lambda df: (df["Black player"].str.contains('GoTrend'|'GT', regex=False) | df["White player"].str.contains('GoTrend'|'GT', regex=False))
-    
-    bot_name = lambda df: (df["Black player"].str.contains('GT', regex=False) | df["White player"].str.contains('GT', regex=False))
+  
+    bot_name = lambda df: (df["Black player"].str.contains('GoTrend', regex=False) | df["White player"].str.contains('GT', regex=False))
 
     return df[bot_name]
         

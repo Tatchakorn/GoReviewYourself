@@ -4,8 +4,10 @@ import graph_functions as g
 import map_functions as m
 import pandas as pd
 import numpy as np
+import glob
 import sys
 import os
+import re
 
 
 '''
@@ -24,7 +26,6 @@ def concat_table(path, file_name):
 
     files = glob.glob(os.path.join(path, '*.pkl'))
     print(files)
-    print(datetime.now())
 
     df = pd.concat([pd.read_pickle(pkl) for pkl in files], ignore_index=True)
 
@@ -208,11 +209,6 @@ def rank_diff_table():
 
 
 
-
-# Concat file path
-read_path_01 = r"C:\go_concat\pickle\one\concat_tbl2.pkl"
-df = pd.read_pickle(read_path_01)
-
 def player_table(Result_table):
     """
     /////---------- Parameters Description ----------/////
@@ -256,7 +252,8 @@ def player_table(Result_table):
     all_player = b_player_list.union(w_player_list)                                             # total of all players (human and bot)
 
     # Bot names begin with "GoTrend" or "GT"
-    bot_player = {i for i in all_player if "GoTrend" or "GT" in i}                                      # bots total
+    r = re.compile('^GoTrend|^GT')
+    bots = set(filter(r.match, all_player)) # bots    
     human_player = all_player - bot_player                                                      # human players total
 
     for player_name in human_player:
@@ -368,7 +365,7 @@ def player_table(Result_table):
 
     human_df = pd.DataFrame.from_dict(df_dict, "index")
     human_df.info()
-    save_path = rw.save_table_path(f"player_table_new.pkl")
+    save_path = rw.save_table_path("player_table_new.pkl")
     human_df.to_pickle(save_path)
 
 
