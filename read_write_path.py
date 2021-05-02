@@ -10,12 +10,12 @@ def read_record_table(num):
     return pd.read_pickle(path)
 
 def read_result_table():
-    path = r"/home/tatchakorn/Desktop/documents/power_rangers/go_table_01.pkl"
+    path = r"/home/tatchakorn/Desktop/documents/New_Table/result_table_concat.pkl"
     return pd.read_pickle(path)
 
 
 def read_player_table():
-    path = r"/home/tatchakorn/Desktop/documents/go_data/player_table.pkl"
+    path = r"/home/tatchakorn/Desktop/documents/New_Table/player_table_new.pkl"
     return pd.read_pickle(path)
 
 def read_rank_info_table():
@@ -26,10 +26,6 @@ def read_level_up_player_table():
     path = r"/home/tatchakorn/Desktop/documents/go_data/table/level_up_player_table.pkl"
     return pd.read_pickle(path)
 
-def read_result_table_new():
-    path = r"/home/tatchakorn/Desktop/documents/New_Table/result_table_new.pkl"
-    return pd.read_pickle(path)
-
 def read_record_table_new(num):
     path = f"/home/tatchakorn/Desktop/documents/New_Table/go_record_table_new_{num}.pkl"
     if num > 9:
@@ -37,9 +33,6 @@ def read_record_table_new(num):
         return
     return pd.read_pickle(path)
 
-def read_player_table_new():
-    path = r"/home/tatchakorn/Desktop/documents/New_Table/player_table_new.pkl"
-    return pd.read_pickle(path)
 
 # ----- Save ----- ----- Save ----- ----- Save ----- ----- Save -----
 

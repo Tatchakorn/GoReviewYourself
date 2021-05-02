@@ -6,7 +6,8 @@ import hashlib
 import glob
 import re
 
-
+# Find rows that have bot name (i.e. "Gotrend" in name)
+bot_name = lambda df: (df["Black player"].str.contains('^GoTrend|^GT', regex=True) | df["White player"].str.contains('^GoTrend|^GT', regex=True))
 
 def find_PlayerVsOpponent_games(player1, player2):
     df = rw.read_result_table()
@@ -14,7 +15,7 @@ def find_PlayerVsOpponent_games(player1, player2):
     df_player = df.loc[p_name]
     return df_player
 
-def find_player_info(name):
+def find_player_rows(name):
     '''    
     name -> player_table
     Find player in player table
@@ -43,11 +44,10 @@ def find_player_games(name, with_bot=False, with_human=False):
 
     # Find rows that have bot name (i.e. "Gotrend" in name)
     if with_bot: # results of ONLY BOT games
-        bot_name = lambda df: (df["Black player"].str.contains('GoTrend', regex=False) | df["White player"].str.contains('GoTrend', regex=False))
         return df_player[bot_name]
     
     else: # results of ONLY HUMAN games
-        human_name = lambda df: ~(df["Black player"].str.contains('GoTrend', regex=False) | df["White player"].str.contains('GoTrend', regex=False))
+        human_name = lambda df: ~(df["Black player"].str.contains('^GoTrend|^GT', regex=True) | df["White player"].str.contains('^GoTrend|^GT', regex=True))
         return df_player[human_name]
         
 def find_all_bot_games():
@@ -56,24 +56,18 @@ def find_all_bot_games():
     
     Find games with bots 
     '''
-
     df = rw.read_result_table()
-    
-    # Find rows that have bot name (i.e. "Gotrend" in name)
-  
-    bot_name = lambda df: (df["Black player"].str.contains('GoTrend', regex=False) | df["White player"].str.contains('GT', regex=False))
-
     return df[bot_name]
         
 def get_Unique_bots(colour = "both"):
     df = m.find_all_bot_games()
 
     # Black bot
-    black_bot = lambda df: df["Black player"].str.contains('GoTrend', regex=False)
+    black_bot = lambda df: df["Black player"].str.contains('^GoTrend|^GT', regex=True)
     black_set = set(df[black_bot]["Black player"].to_list())
 
     # White bot
-    white_bot = lambda df: df["White player"].str.contains('GoTrend', regex=False)
+    white_bot = lambda df: df["White player"].str.contains('^GoTrend|^GT', regex=True)
     white_set = set(df[white_bot]["White player"].to_list())
 
     unique_bots = black_set.union(white_set)
@@ -97,10 +91,10 @@ def get_bot_rank(df):
     Return a List of bots' ranks from player dataframe
     '''
     # Black bot
-    black_bot = lambda df: df["Black player"].str.contains('GoTrend', regex=False)
+    black_bot = lambda df: df["Black player"].str.contains('^GoTrend|^GT', regex=True)
         
     # White bot
-    white_bot = lambda df: df["White player"].str.contains('GoTrend', regex=False)
+    white_bot = lambda df: df["White player"].str.contains('^GoTrend|^GT', regex=True)
         
     return df[black_bot]["Black Rank"].to_list() + df[white_bot]["White Rank"].to_list()
 

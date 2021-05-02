@@ -254,7 +254,7 @@ def player_table(Result_table):
     # Bot names begin with "GoTrend" or "GT"
     r = re.compile('^GoTrend|^GT')
     bots = set(filter(r.match, all_player)) # bots    
-    human_player = all_player - bot_player                                                      # human players total
+    human_player = all_player - bots                                                      # human players total
 
     for player_name in human_player:
         # The rows that the player's name appear
@@ -273,7 +273,9 @@ def player_table(Result_table):
         count_wb_bot = 0
 
         for index, row in sub_df.iterrows():
-            if "GoTrend" in row["Black player"] or "GoTrend" in row["White player"]:
+            # if "GoTrend" in row["Black player"] or "GoTrend" in row["White player"]:
+
+            if re.match(r, row["Black player"]) or re.match(r, row["White player"]): 
                 count_bot += 1
                 play_with_bot = True
             else:
@@ -364,10 +366,30 @@ def player_table(Result_table):
         df_dict_index += 1
 
     human_df = pd.DataFrame.from_dict(df_dict, "index")
-    human_df.info()
-    save_path = rw.save_table_path("player_table_new.pkl")
+    save_path = rw.save_table_path("player_table_update.pkl")
     human_df.to_pickle(save_path)
 
+def unique_bot_table(Result_table):
+    
+    df_dict = {}
+    # A counter used to add entries to "df_dict"
+    df_dict_index = 0
+
+    # Union sets of black and white player to get all players' names
+    b_player_list = {player for player in Result_table["Black player"]}
+    w_player_list = {player for player in Result_table["White player"]}
+    all_player = b_player_list.union(w_player_list)     
+    
+    # Bot names begin with "GoTrend" or "GT"
+    r = re.compile('^GoTrend|^GT')
+    bots = set(filter(r.match, all_player)) # bots   
+    df_dict[df_dict_index] = {"name": player_name, "n_game": n_game}
+    print(bots)
+
+    for bot in bots:
+        sub_df = Result_table.loc[(Result_table["Black player"] == bot) | (Result_table["White player"] == bot)]
+        print(sub_df)
+        break
 
 if __name__=="__main__": 
     print("Heil Loo!")

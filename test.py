@@ -15,6 +15,13 @@ import re
 -> Player_table: name,  n_game,  n_win,  n_lose,  n_black, ETC...
 -> rank_info_table: name, rank, op rank
 -> level_up_player_table: name, rank, op rank, intervals
+
+NEW
+
+-> player_table_new + player_table_update =  player_table_concat
+-> rank_info_table_new
+-> unique_bot_table: , rank, n_game
+
 '''
 
 """
@@ -32,18 +39,12 @@ test_file_name = "58258547.sgf"
 test_player_name = "lylotus"
 name = 'shigepo'
 
-df = rw.read_result_table_new()
+# df = rw.read_result_table_new()
+# tf.player_table(df)
 
+# df = rw.read_rank_info_table()
+df = rw.read_result_table()
 tf.player_table(df)
-
-# print(m.find_all_bot_games())
-
-# df = rw.read_player_table()
-# df.loc[]
-# print(df.head())
-# print(m.find_all_bot_games().describe)
-# print(m.find_all_bot_games(), "\n") # 478206
-# m.get_Unique_bots("both")
 
 
 
