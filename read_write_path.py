@@ -15,7 +15,7 @@ def read_result_table():
 
 
 def read_player_table():
-    path = r"/home/tatchakorn/Desktop/documents/New_Table/player_table_new.pkl"
+    path = r"/home/tatchakorn/Desktop/documents/New_Table/player_table_update.pkl"
     return pd.read_pickle(path)
 
 def read_rank_info_table():
@@ -31,6 +31,10 @@ def read_record_table_new(num):
     if num > 9:
         print(num, 'file does not exist')
         return
+    return pd.read_pickle(path)
+
+def read_unique_bot():
+    path = r"/home/tatchakorn/Desktop/documents/New_Table/unique_bot.pkl"
     return pd.read_pickle(path)
 
 

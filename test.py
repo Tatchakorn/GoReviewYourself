@@ -4,10 +4,13 @@ import map_functions as m
 import table_functions as tf
 import pandas as pd
 import numpy as np
+import glob
 import hashlib
+import time
 import sys
 import os
 import re
+import shutil
 
 '''
 -> Record_table: File name, Record
@@ -35,98 +38,79 @@ ammount of rank with the same rank
 range of rank
 """
 
-test_file_name = "58258547.sgf"
-test_player_name = "lylotus"
-name = 'shigepo'
 
-# df = rw.read_result_table_new()
-# tf.player_table(df)
-
-# df = rw.read_rank_info_table()
-df = rw.read_result_table()
-tf.player_table(df)
+result_table =  rw.read_result_table()
+player_table = rw.read_player_table()
+unique_bot = rw.read_unique_bot()
+bot_game = lambda df: df["Black player"].str.contains('^GoTrend|^GT', regex=True) | df["White player"].str.contains('^GoTrend|^GT', regex=True)
+print(result_table[bot_game])
+# print(unique_bot.info())
+sys.exit()
 
 
+# record_table = rw.read_record_table_new(1)
+result_table = rw.read_result_table()
+# rank_info_table = rw.read_rank_info_table()
+# level_up_player_table = rw.read_level_up_player_table()
+
+# tf.unique_bot_table(result_table)
+
+unique_bot = rw.read_unique_bot()
+print(unique_bot.to_string())
+
+player_hash_name = player_table["name"].map(lambda name: hashlib.md5(name.encode('UTF-8')).hexdigest())
+player_name = (i for i in player_hash_name)
 
 
-# m.check_ranks(check=True) # Rank list -> kyu, dan, pro
-# df = m.find_player_ranks(test_player_name)
+for hash_name, name in zip(player_hash_name, player_table["name"]):
+    if '201f6534909' in hash_name: # rank_graph_103
+        print('Hashed:')
+        print(hash_name)
+        print('name:')
+        print(name)
+        name_f = name
 
-# sys.stdout = open(r'C:\power_rangers\out_buff.txt','w') # print to file 
-# df = rw.read_record_table(0)
-# df = rw.read_level_up_player_table()
-# print(df.describe())
-# f_index = 0
-# df = rw.read_level_up_player_table()
-# for index, player in df.iterrows():
-#     games = m.find_player_games(player['name'])
-#     name = hashlib.md5(player['name'].encode('UTF-8')).hexdigest()
+# New sgf file path
+path = r"/home/tatchakorn/Downloads/new gibo/"
+path_list = os.listdir(path) # directory list
+sgf_file_path = [os.path.join(path, _path, '*.sgf') for _path in path_list]
+# generator expression for files end with '.sgf'
+sgf_file_list = (glob.glob(_path) for _path in sgf_file_path)
+sgf_files = (sgf_file for sgf_files in sgf_file_list for sgf_file in sgf_files)
 
-#     games['Black player'] = games['Black player'].map(lambda name: hashlib.md5(name.encode('UTF-8')).hexdigest())
-#     games['White player'] = games['White player'].map(lambda name: hashlib.md5(name.encode('UTF-8')).hexdigest())
-#     print(name)
-#     print(games.to_string())
-#     # print(player)
-    
-#     # print(name)
-#     # print(game)
-#     # print(player[['rank', 'op rank']])
+counter_g = 0
+for sgf_file in sgf_files:
+    counter_g += 1
+print(counter_g)
+sys.exit()
 
-#     # --- Graph Stuff ---
-#     plt.title(name)
-#     plt.xlabel('Game')
-#     plt.ylabel('Rank')
-#     plt.style.use('seaborn')
-    
-#     x = [i for i in range(len(player['rank']))]
-#     y1 = player['rank']
-#     y2 = player['op rank']
-    
-#     plt.plot(x, y1, color = 'g', alpha=0.6)
-#     plt.plot(x, y2, color = 'r', alpha=0.5)
-#     plt.legend(['player rank','opponent rank'])
-#     path = rw.save_graph_path(f'fuck_this_shit\\rank_graph_{f_index}.png')
-#     f_index += 1
-#     plt.savefig(path)
-#     plt.cla()
-
-# sys.stdout.close()
+player_game = m.find_player_games(name_f)
+player_game = player_game["File name"].to_list()
+for file_name in player_game:
+    print(file_name)
 
 
-'''
-df = rw.read_level_up_player_table()
-for index, player in df.iterrows():
+player_game_path = [i for i in sgf_files if os.path.split(i)[-1] in player_game]
 
-    games = m.find_player_games(player['name'])
-    name = hashlib.md5(player['name'].encode('UTF-8')).hexdigest()
+print(len(player_game_path))
 
-    games['Black player'] = games['Black player'].map(lambda name: hashlib.md5(name.encode('UTF-8')).hexdigest())
-    games['White player'] = games['White player'].map(lambda name: hashlib.md5(name.encode('UTF-8')).hexdigest())
-    print(name)
-    print(games.to_string())
-    # print(player)
-    
-    
-    
-    # print(name)
-    # print(game)
-    # print(player[['rank', 'op rank']])
 
-    # --- Graph Stuff ---
-    #  plt.title(name)
-    # plt.xlabel('Game')
-    # plt.ylabel('Rank')
-    # plt.style.use('seaborn')
-    
-    # x = [i for i in range(len(player['rank']))]
-    # y1 = player['rank']
-    # y2 = player['op rank']
-    
-    # plt.plot(x, y1, color = 'g', alpha=0.6)
-    # plt.plot(x, y2, color = 'r', alpha=0.5)
-    # plt.legend(['player rank','opponent rank'])
-    # path = rw.save_graph_path(f'rank_graph_{f_index}.png')
-    # f_index += 1
-    # plt.savefig(path)
-    # plt.cla()
-'''
+
+dest_path = '/home/tatchakorn/Desktop/sgf_file_temp'
+
+for game_path in player_game_path:
+    g_file_name = os.path.split(game_path)[-1]
+    dest = os.path.join(dest_path, g_file_name)
+    print(g_file_name)
+    print(dest)
+    shutil.copyfile(game_path, dest) 
+
+# print('+'*15)
+
+# for sgf_file in sgf_files:
+#     file_name = os.path.split(sgf_file)[-1]
+#     print(file_name)
+
+#     break
+# 3e666d03069da7086237bfe49ac5f48e
+

@@ -89,7 +89,7 @@ def rank_info_table():
     df_dict = {}
     df_dict_index = 0
 
-    for player in m.player_name_list(n_game=60):
+    for player in m.players_play_more_than(n_game=60):
 
         try:
             df = m.find_player_ranks(player)
@@ -383,13 +383,37 @@ def unique_bot_table(Result_table):
     # Bot names begin with "GoTrend" or "GT"
     r = re.compile('^GoTrend|^GT')
     bots = set(filter(r.match, all_player)) # bots   
-    df_dict[df_dict_index] = {"name": player_name, "n_game": n_game}
-    print(bots)
+    # df_dict[df_dict_index] = {"name": player_name, "name": player_name, 
+    # "n_game": n_game, "n_win": count_win, "n_lose": n_lose, "win%": win_rate}
+
 
     for bot in bots:
+        count_win = 0
         sub_df = Result_table.loc[(Result_table["Black player"] == bot) | (Result_table["White player"] == bot)]
-        print(sub_df)
-        break
+         # Count the total  number of games by the number of rows of sub_df
+        n_game = len(sub_df.index)           
+
+        for index, row in sub_df.iterrows():
+            # if "GoTrend" in row["Black player"] or "GoTrend" in row["White player"]:
+            if bot == row["Black player"] and "B" in row["Result"]:
+                count_win += 1
+
+            if bot == row["White player"] and "W" in row["Result"]:
+                count_win += 1
+
+        try:
+            win_rate = "{:.2f}".format(count_win/n_game*100)
+        except ZeroDivisionError:
+            win_rate = np.nan
+
+        df_dict[df_dict_index] = {"name": bot, "n_game": n_game, "n_win": count_win, "win%": win_rate}
+        df_dict_index += 1
+        
+
+
+    df = pd.DataFrame.from_dict(df_dict, "index")
+    save_path = rw.save_table_path("unique_bot.pkl")
+    df.to_pickle(save_path)
 
 if __name__=="__main__": 
     print("Heil Loo!")

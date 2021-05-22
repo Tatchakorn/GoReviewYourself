@@ -211,11 +211,17 @@ def rank_to_num(rank):
 
     else: # pro rank
         return int(num) + 80
-        
+
+def bot_and_player_equal_rank_games():
+    bot_table = rw.read_result_table()[bot_name]
+    # same_rank = lambda df: rank_to_num(df["Black Rank"]) == rank_to_num(df["White Rank"]) 
+    
+    same_rank = lambda df: df["Black Rank"].apply(rank_to_num) == df["White Rank"].apply(rank_to_num)
+    print(bot_table[same_rank])
 
 # ----- object ----- ----- object ----- ----- object ----- ----- object -----
 
-def player_name_list(n_game=0):
+def players_play_more_than(n_game=0):
     '''
     return a list of player name
     with specified number of games
